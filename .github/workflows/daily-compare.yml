@@ -39,10 +39,6 @@ jobs:
           echo "Generated JSON files:"
           ls -lh data/*.json
 
-      - name: Generate combined index.json
-        run: |
-          jq -s '.' data/*.json > data/index.json
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
         with:
