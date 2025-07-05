@@ -75,7 +75,7 @@ func main() {
 				continue
 			}
 
-			ref := imgConf.Image + ":latest"
+			ref := imgConf.Image
 			log.Printf("Fetching manifest list for image '%s' (%s)...", key, ref)
 			manifestList, err := crane.Manifest(ref)
 			if err != nil {
@@ -203,16 +203,29 @@ func fetchLatestVersion(url, regexStr string) string {
 	var rawVersions []string
 	for _, m := range matches {
 		if len(m) > 1 {
-			rawVersions = append(rawVersions, m[1])
+			rawVer := m[1]
+
+			// Exclude pre-release versions (alpha, beta, rc, ea, etc)
+			lowerVer := strings.ToLower(rawVer)
+			if strings.Contains(lowerVer, "alpha") ||
+				strings.Contains(lowerVer, "beta") ||
+				strings.Contains(lowerVer, "rc") ||
+				strings.Contains(lowerVer, "preview") ||
+				strings.Contains(lowerVer, "b") ||
+				strings.Contains(lowerVer, "ea") {
+				continue
+			}
+
+			rawVersions = append(rawVersions, rawVer)
 		}
 	}
 	var semVersions []*semver.Version
 	for _, v := range rawVersions {
 	    v = strings.TrimPrefix(v, "v")
-	
+
 	    // Convert underscores to dots for ruby-like versions
 	    v = strings.ReplaceAll(v, "_", ".")
-	
+
 	    if strings.Count(v, ".") < 2 {
 	        continue
 	    }

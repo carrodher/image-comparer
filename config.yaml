@@ -1,6 +1,6 @@
 dotnet:
   url: https://github.com/dotnet/aspnetcore/tags
-  regex: /tags/v([0-9\.]+)
+  regex: /tag/v([0-9\.]+[a-zA-Z0-9\-]*)
   bitnami:
     image: docker.io/bitnami/aspnet-core
     command: "dotnet --info"
@@ -46,9 +46,25 @@ node:
     command: "--version"
     regex: "v([0-9.]+)"
 
+php:
+  url: https://github.com/php/php-src/tags
+  regex: /tag/php-([0-9\.]+[a-zA-Z0-9\-]*)
+  bitnami:
+    image: docker.io/bitnami/php-fpm
+    command: "php --version"
+    regex: "PHP ([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/php-fpm-min
+    command: ""
+    regex: ""
+  cg:
+    image: cgr.dev/chainguard/php:latest-fpm
+    command: ""
+    regex: ""
+
 python:
   url: https://github.com/python/cpython/tags
-  regex: /tags/v([0-9\.]+)
+  regex: /tag/v([0-9\.]+[a-zA-Z0-9\-]*)
   bitnami:
     image: docker.io/bitnami/python
     command: "python --version"
@@ -64,7 +80,7 @@ python:
 
 ruby:
   url: https://github.com/ruby/ruby/tags
-  regex: /tags/v([0-9_]+)
+  regex: /tag/v([0-9_]+)
   bitnami:
     image: docker.io/bitnami/ruby
     command: "ruby --version"
