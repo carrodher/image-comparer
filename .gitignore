@@ -1,0 +1,15 @@
+# Ignore Go build artifacts
+*.exe
+*.out
+*.test
+*.log
+coverage.out
+
+# Dependency directories
+/vendor/
+/bin/
+/dist/
+
+# Ignore editor and OS files
+.DS_Store
+*.swp

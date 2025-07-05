@@ -1,0 +1,61 @@
+name: Daily Container Upstream Sync
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # every day at 06:00 UTC
+  workflow_dispatch:     # allow manual trigger
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for diffing and PRs
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install Docker
+        run: sudo apt-get update && sudo apt-get install -y docker.io
+
+      - name: Install Trivy
+        uses: aquasecurity/trivy-action@0.16.2
+        with:
+          install-only: true
+
+      - name: Install Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Run Go generator
+        run: |
+          go run main.go
+          echo "Generated JSON files:"
+          ls -lh data/*.json
+
+      - name: Generate combined index.json
+        run: |
+          jq -s '.' data/*.json > data/index.json
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: daily metadata update"
+          title: "chore: daily container metadata sync"
+          body: |
+            This PR was created automatically via GitHub Actions.
+
+            It updates the container metadata files with the latest:
+            - Upstream versions
+            - Image sizes (per arch)
+            - Trivy/Grype CVEs
+            - Detected image versions
+          branch: update/container-metadata
+          delete-branch: true
+          add-paths: |
+            data/*.json
