@@ -1,3 +1,19 @@
+dotnet:
+  url: https://github.com/dotnet/aspnetcore/tags
+  regex: /tags/v([0-9\.]+)
+  bitnami:
+    image: docker.io/bitnami/aspnet-core
+    command: "dotnet --info"
+    regex: "Version: *([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/aspnet-min
+    command: "--info"
+    regex: "Version: *([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/aspnet-runtime
+    command: "--info"
+    regex: "Version: *([0-9.]+)"
+
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
@@ -14,22 +30,6 @@ java:
     command: "javac --version"
     regex: "javac ([0-9.]+)"
 
-dotnet:
-  url: https://github.com/dotnet/runtime/tags
-  regex: /tags/v([0-9\.]+)
-  bitnami:
-    image: docker.io/bitnami/dotnet
-    command: "dotnet --version"
-    regex: "([0-9.]+)"
-  bitnamisecure:
-    image: docker.io/bitnamisecure/dotnet-min
-    command: "dotnet --version"
-    regex: "([0-9.]+)"
-  cg:
-    image: cgr.dev/chainguard/dotnet-runtime
-    command: "dotnet --info"
-    regex: "Version: ([0-9.]+)"
-
 node:
   url: https://github.com/nodejs/node/tags
   regex: /tag/v([0-9][02468].[0-9\\.]+)
@@ -39,11 +39,11 @@ node:
     regex: "v([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/node-min
-    command: "node --version"
+    command: "--version"
     regex: "v([0-9.]+)"
   cg:
     image: cgr.dev/chainguard/node
-    command: "node --version"
+    command: "--version"
     regex: "v([0-9.]+)"
 
 python:
@@ -55,11 +55,11 @@ python:
     regex: "Python ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/python-min
-    command: "python --version"
+    command: "--version"
     regex: "Python ([0-9.]+)"
   cg:
     image: cgr.dev/chainguard/python
-    command: "python --version"
+    command: "--version"
     regex: "Python ([0-9.]+)"
 
 ruby:
@@ -71,9 +71,9 @@ ruby:
     regex: "ruby ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/ruby-min
-    command: "ruby --version"
+    command: "--version"
     regex: "ruby ([0-9.]+)"
   cg:
     image: cgr.dev/chainguard/ruby
-    command: "ruby --version"
+    command: "--version"
     regex: "ruby ([0-9.]+)"

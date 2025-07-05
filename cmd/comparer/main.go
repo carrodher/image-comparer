@@ -208,15 +208,19 @@ func fetchLatestVersion(url, regexStr string) string {
 	}
 	var semVersions []*semver.Version
 	for _, v := range rawVersions {
-		v = strings.TrimPrefix(v, "v")
-		if strings.Count(v, ".") < 2 {
-			continue
-		}
-		ver, err := semver.NewVersion(v)
-		if err != nil || ver.Prerelease() != "" {
-			continue
-		}
-		semVersions = append(semVersions, ver)
+	    v = strings.TrimPrefix(v, "v")
+	
+	    // Convert underscores to dots for ruby-like versions
+	    v = strings.ReplaceAll(v, "_", ".")
+	
+	    if strings.Count(v, ".") < 2 {
+	        continue
+	    }
+	    ver, err := semver.NewVersion(v)
+	    if err != nil || ver.Prerelease() != "" {
+	        continue
+	    }
+	    semVersions = append(semVersions, ver)
 	}
 	if len(semVersions) == 0 {
 		log.Fatal("No valid stable versions found")

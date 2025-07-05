@@ -1,92 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Java Security Comparison</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    }
-    th, td {
-      text-align: center;
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #007acc;
-      color: white;
-    }
-    td span {
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Container Security Scan Reports</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  h2 {
+    margin-top: 40px;
+  }
+  table {
+    border-collapse: collapse;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 600px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    text-align: center;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .green {
+    color: green;
+    font-weight: bold;
+  }
+  .red {
+    color: red;
+    font-weight: bold;
+  }
+</style>
 </head>
 <body>
-  <h1>Java Security Comparison</h1>
+<h1>Container Security Scan Reports</h1>
+<div id="reports"></div>
+
+<script>
+// List your JSON files here, you can generate this dynamically if needed
+const jsonFiles = [
+  "dotnet.json",
+  "java.json",
+  "node.json",
+  "python.json",
+  "ruby.json",
+  // add more filenames as needed
+];
+
+// Helper to color counts green if zero, red otherwise
+function colorClass(count) {
+  return count === "0" ? "green" : "red";
+}
+
+async function loadReport(filename) {
+  try {
+    const response = await fetch(`data/${filename}`);
+    if (!response.ok) throw new Error(`Failed to load ${filename}`);
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+function createTableForImage(imageName, imageData) {
+  // Defensive: if no trivy or grype keys, return empty string
+  if (!imageData.trivy || !imageData.grype) return "";
+
+  const trivy = imageData.trivy;
+  const grype = imageData.grype;
+
+  // Build the table HTML string
+  return `
+  <h3>${imageName}</h3>
   <table>
     <thead>
-      <tr>
-        <th>Image</th>
-        <th>Size (AMD64)</th>
-        <th>Size (ARM64)</th>
-        <th>Version Detected</th>
-        <th>Trivy<br>(Crit | High | Med | Low)</th>
-        <th>Grype<br>(Crit | High | Med | Low)</th>
-      </tr>
+      <tr><th>Tool</th><th>Critical</th><th>High</th><th>Medium</th><th>Low</th></tr>
     </thead>
-    <tbody id="data-body"></tbody>
+    <tbody>
+      <tr>
+        <td>Trivy (Crit | High | Med | Low)</td>
+        <td class="${colorClass(trivy.critical)}">${trivy.critical}</td>
+        <td class="${colorClass(trivy.high)}">${trivy.high}</td>
+        <td class="${colorClass(trivy.medium)}">${trivy.medium}</td>
+        <td class="${colorClass(trivy.low)}">${trivy.low}</td>
+      </tr>
+      <tr>
+        <td>Grype (Crit | High | Med | Low)</td>
+        <td class="${colorClass(grype.critical)}">${grype.critical}</td>
+        <td class="${colorClass(grype.high)}">${grype.high}</td>
+        <td class="${colorClass(grype.medium)}">${grype.medium}</td>
+        <td class="${colorClass(grype.low)}">${grype.low}</td>
+      </tr>
+    </tbody>
   </table>
+  `;
+}
 
-  <script>
-    async function loadData() {
-      const res = await fetch('data/java.json');
-      const data = await res.json();
+function createReportComponent(name, data) {
+  const upstreamVersion = data.upstream?.version || "N/A";
+  const images = data.images || {};
 
-      const vendors = ["bitnami", "bitnamisecure", "cg"];
-      const table = document.getElementById('data-body');
+  let html = `<section><h2>${name} (upstream version: ${upstreamVersion})</h2>`;
 
-      const formatSeverity = (obj) => {
-        const sev = ["critical", "high", "medium", "low"];
-        return sev.map(s => {
-          const count = obj?.[s] || "0";
-          const color = count === "0" ? "green" : "red";
-          return `<span style="color:${color};">${count}</span>`;
-        }).join(" | ");
-      };
+  for (const [imageName, imageData] of Object.entries(images)) {
+    html += createTableForImage(imageName, imageData);
+  }
 
-      for (const vendor of vendors) {
-        const img = data.images[vendor];
-        const amd = img?.amd64?.size_mb || "–";
-        const arm = img?.arm64?.size_mb || "–";
-        const ver = img?.detected_version || "–";
-        const trivy = img.trivy ? formatSeverity(img.trivy) : "–";
-        const grype = img.grype ? formatSeverity(img.grype) : "–";
+  html += `</section>`;
 
-        table.innerHTML += `
-          <tr>
-            <td>${vendor}</td>
-            <td>${amd}</td>
-            <td>${arm}</td>
-            <td>${ver}</td>
-            <td>${trivy}</td>
-            <td>${grype}</td>
-          </tr>`;
-      }
+  return html;
+}
+
+async function loadAllReports() {
+  const container = document.getElementById("reports");
+
+  for (const filename of jsonFiles) {
+    const name = filename.replace(".json", "");
+    const data = await loadReport(filename);
+    if (data) {
+      container.innerHTML += createReportComponent(name, data);
+    } else {
+      container.innerHTML += `<section><h2>${name}</h2><p style="color:red;">Failed to load report.</p></section>`;
     }
+  }
+}
 
-    loadData();
-  </script>
+loadAllReports();
+</script>
 </body>
 </html>

@@ -1,0 +1,69 @@
+{
+  "images": {
+    "bitnami": {
+      "amd64": {
+        "size_mb": "264.82"
+      },
+      "arm64": {
+        "size_mb": "258.07"
+      },
+      "detected_version": "24.2.0",
+      "grype": {
+        "critical": "0",
+        "high": "18",
+        "low": "10",
+        "medium": "24"
+      },
+      "trivy": {
+        "critical": "1",
+        "high": "175",
+        "low": "386",
+        "medium": "452"
+      }
+    },
+    "bitnamisecure": {
+      "amd64": {
+        "size_mb": "49.03"
+      },
+      "arm64": {
+        "size_mb": "48.17"
+      },
+      "grype": {
+        "critical": "0",
+        "high": "0",
+        "low": "0",
+        "medium": "0"
+      },
+      "trivy": {
+        "critical": "0",
+        "high": "0",
+        "low": "0",
+        "medium": "0"
+      }
+    },
+    "cg": {
+      "amd64": {
+        "size_mb": "55.90"
+      },
+      "arm64": {
+        "size_mb": "54.27"
+      },
+      "detected_version": "24.3.0",
+      "grype": {
+        "critical": "0",
+        "high": "0",
+        "low": "2",
+        "medium": "0"
+      },
+      "trivy": {
+        "critical": "0",
+        "high": "0",
+        "low": "0",
+        "medium": "0"
+      }
+    }
+  },
+  "upstream": {
+    "version": "24.3.0"
+  }
+}
