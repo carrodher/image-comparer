@@ -1,136 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Container Security Scan Reports</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  h2 {
-    margin-top: 40px;
-  }
-  table {
-    border-collapse: collapse;
-    margin-top: 8px;
-    width: 100%;
-    max-width: 600px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 6px 10px;
-    text-align: center;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-  .green {
-    color: green;
-    font-weight: bold;
-  }
-  .red {
-    color: red;
-    font-weight: bold;
-  }
-</style>
+  <meta charset="utf-8">
+  <title>Container Security Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; margin-bottom: 40px; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    h2 { margin-top: 60px; }
+    .green { color: green; }
+    .red { color: red; }
+  </style>
 </head>
 <body>
-<h1>Container Security Scan Reports</h1>
-<div id="reports"></div>
+  <h1>Container Image Security Overview</h1>
+  <script>
+    async function load() {
+      const files = await fetch('data/index.json').then(r => r.json());
+      const container = document.body;
 
-<script>
-// List your JSON files here, you can generate this dynamically if needed
-const jsonFiles = [
-  "dotnet.json",
-  "java.json",
-  "node.json",
-  "python.json",
-  "ruby.json",
-  // add more filenames as needed
-];
+      for (const file of files) {
+        const data = await fetch(`data/${file}`).then(r => r.json());
+        const appName = file.replace('.json', '');
+        const upstream = data.upstream?.version || 'Unknown';
+        const images = data.images || {};
 
-// Helper to color counts green if zero, red otherwise
-function colorClass(count) {
-  return count === "0" ? "green" : "red";
-}
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+          <tr>
+            <th>Image</th>
+            <th>amd64 Size (MB)</th>
+            <th>arm64 Size (MB)</th>
+            <th>Detected Version</th>
+            <th>Trivy (Crit | High | Med | Low)</th>
+            <th>Grype (Crit | High | Med | Low)</th>
+          </tr>`;
+        table.appendChild(thead);
 
-async function loadReport(filename) {
-  try {
-    const response = await fetch(`data/${filename}`);
-    if (!response.ok) throw new Error(`Failed to load ${filename}`);
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+        const tbody = document.createElement('tbody');
 
-function createTableForImage(imageName, imageData) {
-  // Defensive: if no trivy or grype keys, return empty string
-  if (!imageData.trivy || !imageData.grype) return "";
+        for (const [imageName, details] of Object.entries(images)) {
+          const row = document.createElement('tr');
 
-  const trivy = imageData.trivy;
-  const grype = imageData.grype;
+          const get = (obj, key) => obj?.[key] || '';
 
-  // Build the table HTML string
-  return `
-  <h3>${imageName}</h3>
-  <table>
-    <thead>
-      <tr><th>Tool</th><th>Critical</th><th>High</th><th>Medium</th><th>Low</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Trivy (Crit | High | Med | Low)</td>
-        <td class="${colorClass(trivy.critical)}">${trivy.critical}</td>
-        <td class="${colorClass(trivy.high)}">${trivy.high}</td>
-        <td class="${colorClass(trivy.medium)}">${trivy.medium}</td>
-        <td class="${colorClass(trivy.low)}">${trivy.low}</td>
-      </tr>
-      <tr>
-        <td>Grype (Crit | High | Med | Low)</td>
-        <td class="${colorClass(grype.critical)}">${grype.critical}</td>
-        <td class="${colorClass(grype.high)}">${grype.high}</td>
-        <td class="${colorClass(grype.medium)}">${grype.medium}</td>
-        <td class="${colorClass(grype.low)}">${grype.low}</td>
-      </tr>
-    </tbody>
-  </table>
-  `;
-}
+          const sizeAmd = get(details, 'amd64')?.size_mb || '';
+          const sizeArm = get(details, 'arm64')?.size_mb || '';
+          const version = get(details, 'detected_version') || '';
 
-function createReportComponent(name, data) {
-  const upstreamVersion = data.upstream?.version || "N/A";
-  const images = data.images || {};
+          const cves = (tool) => {
+            const vals = ['critical', 'high', 'medium', 'low']
+              .map(k => {
+                const val = parseInt(get(details, tool)?.[k] || '0');
+                const cls = val === 0 ? 'green' : 'red';
+                return `<span class="${cls}">${val}</span>`;
+              });
+            return vals.join(' | ');
+          };
 
-  let html = `<section><h2>${name} (upstream version: ${upstreamVersion})</h2>`;
+          row.innerHTML = `
+            <td>${imageName}</td>
+            <td>${sizeAmd}</td>
+            <td>${sizeArm}</td>
+            <td>${version}</td>
+            <td>${cves('trivy')}</td>
+            <td>${cves('grype')}</td>`;
+          tbody.appendChild(row);
+        }
 
-  for (const [imageName, imageData] of Object.entries(images)) {
-    html += createTableForImage(imageName, imageData);
-  }
+        table.appendChild(tbody);
 
-  html += `</section>`;
-
-  return html;
-}
-
-async function loadAllReports() {
-  const container = document.getElementById("reports");
-
-  for (const filename of jsonFiles) {
-    const name = filename.replace(".json", "");
-    const data = await loadReport(filename);
-    if (data) {
-      container.innerHTML += createReportComponent(name, data);
-    } else {
-      container.innerHTML += `<section><h2>${name}</h2><p style="color:red;">Failed to load report.</p></section>`;
+        const heading = document.createElement('h2');
+        heading.textContent = `${appName.charAt(0).toUpperCase() + appName.slice(1)} (Upstream: ${upstream})`;
+        container.appendChild(heading);
+        container.appendChild(table);
+      }
     }
-  }
-}
 
-loadAllReports();
-</script>
+    load();
+  </script>
 </body>
 </html>
