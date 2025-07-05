@@ -42,6 +42,7 @@ Each application is defined in `config.yaml` and results are stored in per-app `
       "arm64": {
         "size_mb": "84.97"
       },
+      "detected_version": "24",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -111,8 +112,8 @@ java:
     regex: "openjdk ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/java-min
-    command: ""
-    regex: ""
+    command: "--version"
+    regex: "openjdk ([0-9.]+)"
   cg:
     image:  cgr.dev/chainguard/jdk
     command: "javac --version"
