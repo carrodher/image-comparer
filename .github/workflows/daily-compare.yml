@@ -35,7 +35,7 @@ jobs:
 
       - name: Run Go generator
         run: |
-          go run main.go
+          go run cmd/comparer/main.go
           echo "Generated JSON files:"
           ls -lh data/*.json
 
