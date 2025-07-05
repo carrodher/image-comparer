@@ -108,7 +108,7 @@ func main() {
 				log.Printf("Skipping empty image reference for key '%s'\n", key)
 				continue
 			}
-
+			log.Printf("===== Processing %s =====", key)
 			log.Printf("Fetching manifest list for image '%s' (%s)...", key, ref)
 			manifestList, err := crane.Manifest(ref)
 			if err != nil {

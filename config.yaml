@@ -1,7 +1,6 @@
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
-  upstream_release_date: "2025-04-15T00:00:00Z"
   bitnami: docker.io/bitnami/java
   bitnamisecure: docker.io/bitnamisecure/java-min
   cg: cgr.dev/chainguard/jdk
@@ -9,51 +8,3 @@ java:
     bitnami: "java --version"
     bitnamisecure: "java --version"
     cg: "javac --version"
-
-dotnet:
-  url: https://github.com/dotnet/runtime/tags
-  regex: /tags/v([0-9\.]+)
-  upstream_release_date: "2025-04-15T00:00:00Z"
-  bitnami: docker.io/bitnami/dotnet
-  bitnamisecure: docker.io/bitnamisecure/dotnet-min
-  cg: cgr.dev/chainguard/dotnet-runtime
-  version_commands:
-    bitnami: "java --version"
-    bitnamisecure: "java --version"
-    cg: "--info"
-
-node:
-  url: https://github.com/nodejs/node/tags
-  regex: /tag/v([0-9][02468].[0-9\\.]+)
-  upstream_release_date: "2025-04-15T00:00:00Z"
-  bitnami: docker.io/bitnami/node
-  bitnamisecure: docker.io/bitnamisecure/node-min
-  cg: cgr.dev/chainguard/node
-  version_commands:
-    bitnami: "node --version"
-    bitnamisecure: "node --version"
-    cg: "--version"
-
-python:
-  url: https://github.com/python/cpython/tags
-  regex: /tags/v([0-9\.]+)
-  upstream_release_date: "2025-04-15T00:00:00Z"
-  bitnami: docker.io/bitnami/python
-  bitnamisecure: docker.io/bitnamisecure/python-min
-  cg: cgr.dev/chainguard/python
-  version_commands:
-    bitnami: "python --version"
-    bitnamisecure: "python --version"
-    cg: "--version"
-
-ruby:
-  url: https://github.com/ruby/ruby/tags
-  regex: \/tags\/v([0-9\_]+)
-  upstream_release_date: "2025-04-15T00:00:00Z"
-  bitnami: docker.io/bitnami/ruby
-  bitnamisecure: docker.io/bitnamisecure/ruby-min
-  cg: cgr.dev/chainguard/ruby
-  version_commands:
-    bitnami: "ruby --version"
-    bitnamisecure: "ruby --version"
-    cg: "--version"
