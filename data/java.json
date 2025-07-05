@@ -1,0 +1,31 @@
+{
+  "images": {
+    "bitnami": {
+      "amd64": {
+        "size_mb": "302.44"
+      },
+      "arm64": {
+        "size_mb": "281.24"
+      }
+    },
+    "bitnamisecure": {
+      "amd64": {
+        "size_mb": "101.57"
+      },
+      "arm64": {
+        "size_mb": "84.97"
+      }
+    },
+    "cg": {
+      "amd64": {
+        "size_mb": "133.95"
+      },
+      "arm64": {
+        "size_mb": "131.75"
+      }
+    }
+  },
+  "upstream": {
+    "version": "24.0.1"
+  }
+}
