@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Image Comparison Table</title>
+  <title id="page-title">Image Comparison</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 2rem; }
     table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
@@ -13,15 +13,21 @@
   </style>
 </head>
 <body>
-  <h1>Container Image Comparison</h1>
+  <h1 id="heading">Container Image Comparison</h1>
   <p>Upstream version: <span id="upstream-version"></span></p>
   <div id="table-container">Loading...</div>
 
   <script>
-    async function renderTable() {
-      const res = await fetch("data/java.json");
+    async function renderTable(app = "java") {
+      const res = await fetch(`data/${app}.json`);
       const data = await res.json();
+
       document.getElementById("upstream-version").textContent = data.upstream.version;
+
+      // Update title and heading dynamically
+      const capitalized = app.charAt(0).toUpperCase() + app.slice(1);
+      document.getElementById("page-title").textContent = `${capitalized} Image Comparison`;
+      document.getElementById("heading").textContent = `${capitalized} Image Comparison`;
 
       const vendors = Object.keys(data.images);
       const table = document.createElement("table");
@@ -32,8 +38,8 @@
           <th>amd64 (MB)</th>
           <th>arm64 (MB)</th>
           <th>Detected Version</th>
-          <th>Trivy (Crit/High/Med/Low)</th>
-          <th>Grype (Crit/High/Med/Low)</th>
+          <th>Trivy (Crit | High | Med | Low)</th>
+          <th>Grype (Crit | High | Med | Low)</th>
         </tr>`;
       table.innerHTML = header;
 
@@ -43,10 +49,10 @@
         const arm = img.arm64?.size_mb || "–";
         const ver = img.detected_version || "–";
         const trivy = img.trivy
-          ? `${img.trivy.critical}/${img.trivy.high}/${img.trivy.medium}/${img.trivy.low}`
+          ? `${img.trivy.critical} | ${img.trivy.high} | ${img.trivy.medium} | ${img.trivy.low}`
           : "–";
         const grype = img.grype
-          ? `${img.grype.critical}/${img.grype.high}/${img.grype.medium}/${img.grype.low}`
+          ? `${img.grype.critical} | ${img.grype.high} | ${img.grype.medium} | ${img.grype.low}`
           : "–";
 
         table.innerHTML += `
@@ -65,7 +71,7 @@
       container.appendChild(table);
     }
 
-    renderTable();
+    renderTable(); // Call with default 'java'
   </script>
 </body>
 </html>
