@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Comparison Table</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f4f4f4; }
+    caption { font-weight: bold; font-size: 1.2em; margin-bottom: 0.5em; }
+  </style>
+</head>
+<body>
+  <h1>Container Image Comparison</h1>
+  <p>Upstream version: <span id="upstream-version"></span></p>
+  <div id="table-container">Loading...</div>
+
+  <script>
+    async function renderTable() {
+      const res = await fetch("data/java.json");
+      const data = await res.json();
+      document.getElementById("upstream-version").textContent = data.upstream.version;
+
+      const vendors = Object.keys(data.images);
+      const table = document.createElement("table");
+
+      const header = `
+        <tr>
+          <th>Vendor</th>
+          <th>amd64 (MB)</th>
+          <th>arm64 (MB)</th>
+          <th>Detected Version</th>
+          <th>Trivy (Crit/High/Med/Low)</th>
+          <th>Grype (Crit/High/Med/Low)</th>
+        </tr>`;
+      table.innerHTML = header;
+
+      for (const vendor of vendors) {
+        const img = data.images[vendor];
+        const amd = img.amd64?.size_mb || "–";
+        const arm = img.arm64?.size_mb || "–";
+        const ver = img.detected_version || "–";
+        const trivy = img.trivy
+          ? `${img.trivy.critical}/${img.trivy.high}/${img.trivy.medium}/${img.trivy.low}`
+          : "–";
+        const grype = img.grype
+          ? `${img.grype.critical}/${img.grype.high}/${img.grype.medium}/${img.grype.low}`
+          : "–";
+
+        table.innerHTML += `
+          <tr>
+            <td>${vendor}</td>
+            <td>${amd}</td>
+            <td>${arm}</td>
+            <td>${ver}</td>
+            <td>${trivy}</td>
+            <td>${grype}</td>
+          </tr>`;
+      }
+
+      const container = document.getElementById("table-container");
+      container.innerHTML = "";
+      container.appendChild(table);
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>

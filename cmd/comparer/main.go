@@ -19,12 +19,18 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type ImageConfig struct {
+	Image   string `yaml:"image"`
+	Command string `yaml:"command"`
+	Regex   string `yaml:"regex"`
+}
+
 type AppConfig struct {
-	URL           string `yaml:"url"`
-	Regex         string `yaml:"regex"`
-	Bitnami       string `yaml:"bitnami"`
-	BitnamiSecure string `yaml:"bitnamisecure"`
-	CG            string `yaml:"cg"`
+	URL           string      `yaml:"url"`
+	Regex         string      `yaml:"regex"`
+	Bitnami       ImageConfig `yaml:"bitnami"`
+	BitnamiSecure ImageConfig `yaml:"bitnamisecure"`
+	CG            ImageConfig `yaml:"cg"`
 }
 
 type TrivyResult struct {
@@ -52,67 +58,28 @@ func main() {
 	checkErr(yaml.Unmarshal(configData, &config))
 
 	for appName, appConf := range config {
-		log.Printf("Processing app '%s'...\n", appName)
-
-		log.Printf("Fetching tags page from URL: %s\n", appConf.URL)
-		resp, err := http.Get(appConf.URL)
-		checkErr(err)
-		defer resp.Body.Close()
-
-		body, err := ioutil.ReadAll(resp.Body)
-		checkErr(err)
-
-		re, err := regexp.Compile(appConf.Regex)
-		checkErr(err)
-
-		matches := re.FindAllStringSubmatch(string(body), -1)
-
-		var rawVersions []string
-		for _, m := range matches {
-			if len(m) > 1 {
-				rawVersions = append(rawVersions, m[1])
-			}
-		}
-
-		var semVersions []*semver.Version
-		for _, v := range rawVersions {
-			v = strings.TrimPrefix(v, "v")
-			if strings.Count(v, ".") < 2 {
-				continue
-			}
-			ver, err := semver.NewVersion(v)
-			if err != nil || ver.Prerelease() != "" {
-				continue
-			}
-			semVersions = append(semVersions, ver)
-		}
-
-		if len(semVersions) == 0 {
-			log.Printf("No valid stable versions found for %s\n", appName)
-			continue
-		}
-
-		sort.Sort(sort.Reverse(semver.Collection(semVersions)))
-		latest := semVersions[0].String()
-		log.Printf("Latest stable version found: %s\n", latest)
+		log.Printf("Processing app '%s'...", appName)
+		latest := fetchLatestVersion(appConf.URL, appConf.Regex)
+		log.Printf("Latest stable version found: %s", latest)
 
 		images := make(map[string]interface{})
-		imageMap := map[string]string{
+		imageMap := map[string]ImageConfig{
 			"bitnami":       appConf.Bitnami,
 			"bitnamisecure": appConf.BitnamiSecure,
 			"cg":            appConf.CG,
 		}
 
-		for key, ref := range imageMap {
-			if ref == "" {
-				log.Printf("Skipping empty image reference for key '%s'\n", key)
+		for key, imgConf := range imageMap {
+			if imgConf.Image == "" {
+				log.Printf("Skipping empty image reference for key '%s'", key)
 				continue
 			}
-			log.Printf("===== Processing %s =====", key)
+
+			ref := imgConf.Image + ":latest"
 			log.Printf("Fetching manifest list for image '%s' (%s)...", key, ref)
 			manifestList, err := crane.Manifest(ref)
 			if err != nil {
-				log.Printf("Failed to get manifest list for %s: %v\n", ref, err)
+				log.Printf("Failed to get manifest list for %s: %v", ref, err)
 				continue
 			}
 
@@ -127,7 +94,7 @@ func main() {
 			}
 
 			if err := json.Unmarshal([]byte(manifestList), &index); err != nil {
-				log.Printf("Failed to parse manifest list for %s: %v\n", ref, err)
+				log.Printf("Failed to parse manifest list for %s: %v", ref, err)
 				continue
 			}
 
@@ -141,24 +108,24 @@ func main() {
 				platRef := fmt.Sprintf("%s@%s", ref, m.Digest)
 				img, err := crane.Pull(platRef)
 				if err != nil {
-					log.Printf("Failed to pull image %s: %v\n", platRef, err)
+					log.Printf("Failed to pull image %s: %v", platRef, err)
 					continue
 				}
 
 				manifest, err := img.Manifest()
 				if err != nil {
-					log.Printf("Failed to get manifest for %s: %v\n", platRef, err)
+					log.Printf("Failed to get manifest for %s: %v", platRef, err)
 					continue
 				}
 
-				var size int64 = 0
+				var size int64
 				for _, layer := range manifest.Layers {
 					size += layer.Size
 				}
 
 				arch := m.Platform.Architecture
 				sizeMb := fmt.Sprintf("%.2f", float64(size)/1024/1024)
-				log.Printf("Image size for arch '%s': %s MB\n", arch, sizeMb)
+				log.Printf("Image size for arch '%s': %s MB", arch, sizeMb)
 
 				archInfo[arch] = map[string]string{
 					"size_mb": sizeMb,
@@ -166,21 +133,22 @@ func main() {
 			}
 
 			log.Printf("Running Grype scan for image '%s'...", ref)
-			grypeCounts, err := scanGrype(ref)
-			if err != nil {
-				log.Printf("Grype scan failed for %s: %v\n", ref, err)
-				grypeCounts = map[string]string{"critical": "0", "high": "0", "medium": "0", "low": "0"}
-			}
-
+			grypeCounts, _ := scanGrype(ref)
 			log.Printf("Running Trivy scan for image '%s'...", ref)
-			trivyCounts, err := scanTrivy(ref)
-			if err != nil {
-				log.Printf("Trivy scan failed for %s: %v\n", ref, err)
-				trivyCounts = map[string]string{"critical": "0", "high": "0", "medium": "0", "low": "0"}
-			}
-
+			trivyCounts, _ := scanTrivy(ref)
 			archInfo["grype"] = grypeCounts
 			archInfo["trivy"] = trivyCounts
+
+			if imgConf.Command != "" && imgConf.Regex != "" {
+				log.Printf("Extracting version from container '%s'...", ref)
+				version, err := extractVersionFromImage(imgConf.Image, imgConf.Command, imgConf.Regex)
+				if err != nil {
+					log.Printf("Failed to extract version from image %s: %v", imgConf.Image, err)
+				} else {
+					archInfo["detected_version"] = version
+					log.Printf("Detected version: %s", version)
+				}
+			}
 
 			images[key] = archInfo
 		}
@@ -200,9 +168,61 @@ func main() {
 
 		outPath := filepath.Join("data", fmt.Sprintf("%s.json", appName))
 		checkErr(os.WriteFile(outPath, jsonData, 0644))
-
-		log.Printf("✅ %s processed successfully. JSON saved to %s\n", appName, outPath)
+		log.Printf("✅ %s processed successfully. JSON saved to %s", appName, outPath)
 	}
+}
+
+func extractVersionFromImage(image, cmdStr, regexStr string) (string, error) {
+	parts := strings.Split(cmdStr, " ")
+	args := append([]string{"run", "--rm", image}, parts...)
+	cmd := exec.Command("docker", args...)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &out
+	if err := cmd.Run(); err != nil {
+		return "", err
+	}
+
+	re := regexp.MustCompile(regexStr)
+	matches := re.FindStringSubmatch(out.String())
+	if len(matches) > 1 {
+		return matches[1], nil
+	}
+	return "", fmt.Errorf("version not found in output")
+}
+
+func fetchLatestVersion(url, regexStr string) string {
+	resp, err := http.Get(url)
+	checkErr(err)
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkErr(err)
+	re, err := regexp.Compile(regexStr)
+	checkErr(err)
+	matches := re.FindAllStringSubmatch(string(body), -1)
+	var rawVersions []string
+	for _, m := range matches {
+		if len(m) > 1 {
+			rawVersions = append(rawVersions, m[1])
+		}
+	}
+	var semVersions []*semver.Version
+	for _, v := range rawVersions {
+		v = strings.TrimPrefix(v, "v")
+		if strings.Count(v, ".") < 2 {
+			continue
+		}
+		ver, err := semver.NewVersion(v)
+		if err != nil || ver.Prerelease() != "" {
+			continue
+		}
+		semVersions = append(semVersions, ver)
+	}
+	if len(semVersions) == 0 {
+		log.Fatal("No valid stable versions found")
+	}
+	sort.Sort(sort.Reverse(semver.Collection(semVersions)))
+	return semVersions[0].String()
 }
 
 func scanTrivy(image string) (map[string]string, error) {
@@ -213,19 +233,11 @@ func scanTrivy(image string) (map[string]string, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	var result TrivyResult
 	if err := json.Unmarshal(out.Bytes(), &result); err != nil {
 		return nil, err
 	}
-
-	counts := map[string]int{
-		"critical": 0,
-		"high":     0,
-		"medium":   0,
-		"low":      0,
-	}
-
+	counts := map[string]int{"critical": 0, "high": 0, "medium": 0, "low": 0}
 	for _, res := range result.Results {
 		for _, vuln := range res.Vulnerabilities {
 			switch strings.ToLower(vuln.Severity) {
@@ -240,7 +252,6 @@ func scanTrivy(image string) (map[string]string, error) {
 			}
 		}
 	}
-
 	return intMapToStrMap(counts), nil
 }
 
@@ -252,19 +263,11 @@ func scanGrype(image string) (map[string]string, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	var result GrypeResult
 	if err := json.Unmarshal(out.Bytes(), &result); err != nil {
 		return nil, err
 	}
-
-	counts := map[string]int{
-		"critical": 0,
-		"high":     0,
-		"medium":   0,
-		"low":      0,
-	}
-
+	counts := map[string]int{"critical": 0, "high": 0, "medium": 0, "low": 0}
 	for _, match := range result.Matches {
 		switch strings.ToLower(match.Vulnerability.Severity) {
 		case "critical":
@@ -277,7 +280,6 @@ func scanGrype(image string) (map[string]string, error) {
 			counts["low"]++
 		}
 	}
-
 	return intMapToStrMap(counts), nil
 }
 

@@ -7,6 +7,7 @@
       "arm64": {
         "size_mb": "281.24"
       },
+      "detected_version": "24.0.1",
       "grype": {
         "critical": "0",
         "high": "17",
@@ -47,6 +48,7 @@
       "arm64": {
         "size_mb": "131.75"
       },
+      "detected_version": "24.0.1",
       "grype": {
         "critical": "0",
         "high": "0",

@@ -1,10 +1,79 @@
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
-  bitnami: docker.io/bitnami/java
-  bitnamisecure: docker.io/bitnamisecure/java-min
-  cg: cgr.dev/chainguard/jdk
-  version_commands:
-    bitnami: "java --version"
-    bitnamisecure: "java --version"
-    cg: "javac --version"
+  bitnami:
+    image: docker.io/bitnami/java
+    command: "java --version"
+    regex: "openjdk ([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/java-min
+    command: ""
+    regex: ""
+  cg:
+    image:  cgr.dev/chainguard/jdk
+    command: "javac --version"
+    regex: "javac ([0-9.]+)"
+
+dotnet:
+  url: https://github.com/dotnet/runtime/tags
+  regex: /tags/v([0-9\.]+)
+  bitnami:
+    image: docker.io/bitnami/dotnet
+    command: "dotnet --version"
+    regex: "([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/dotnet-min
+    command: "dotnet --version"
+    regex: "([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/dotnet-runtime
+    command: "dotnet --info"
+    regex: "Version: ([0-9.]+)"
+
+node:
+  url: https://github.com/nodejs/node/tags
+  regex: /tag/v([0-9][02468].[0-9\\.]+)
+  bitnami:
+    image: docker.io/bitnami/node
+    command: "node --version"
+    regex: "v([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/node-min
+    command: "node --version"
+    regex: "v([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/node
+    command: "node --version"
+    regex: "v([0-9.]+)"
+
+python:
+  url: https://github.com/python/cpython/tags
+  regex: /tags/v([0-9\.]+)
+  bitnami:
+    image: docker.io/bitnami/python
+    command: "python --version"
+    regex: "Python ([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/python-min
+    command: "python --version"
+    regex: "Python ([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/python
+    command: "python --version"
+    regex: "Python ([0-9.]+)"
+
+ruby:
+  url: https://github.com/ruby/ruby/tags
+  regex: /tags/v([0-9_]+)
+  bitnami:
+    image: docker.io/bitnami/ruby
+    command: "ruby --version"
+    regex: "ruby ([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/ruby-min
+    command: "ruby --version"
+    regex: "ruby ([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/ruby
+    command: "ruby --version"
+    regex: "ruby ([0-9.]+)"
