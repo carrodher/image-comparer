@@ -26,9 +26,8 @@ jobs:
           sudo sh get-docker.sh
 
       - name: Install Trivy
-        uses: aquasecurity/trivy-action@0.32.0
-        with:
-          install-only: true
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.64.1
 
       - name: Install Grype
         run: |
