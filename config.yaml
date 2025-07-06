@@ -30,6 +30,22 @@ go:
     command: "version"
     regex: "go version go([0-9.]+)"
 
+gradle:
+  url: https://github.com/gradle/gradle/tags
+  regex: /tag/v([0-9\.]+[a-zA-Z0-9\-]*)
+  bitnami:
+    image: docker.io/bitnami/gradle
+    command: "gradle --version"
+    regex: "Gradle ([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/gradle
+    command: "gradle --version"
+    regex: "Gradle ([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/gradle
+    command: "--version"
+    regex: "Gradle ([0-9.]+)"
+
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
@@ -109,3 +125,19 @@ ruby:
     image: cgr.dev/chainguard/ruby
     command: "--version"
     regex: "ruby ([0-9.]+)"
+
+rust:
+  url: https://github.com/rust-lang/rust/tags
+  regex: /tag/([0-9\.]+[a-zA-Z0-9\-]*)
+  bitnami:
+    image: docker.io/bitnami/rust
+    command: "rustc --version"
+    regex: "rustc ([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/rust
+    command: "rustc --version"
+    regex: "rustc ([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/rust
+    command: "--version"
+    regex: "rustc ([0-9.]+)"
