@@ -1,85 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Container Security Report</title>
+  <meta charset="UTF-8">
+  <title>Image comparison</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; }
-    table { border-collapse: collapse; margin-bottom: 40px; width: 100%; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background-color: #f2f2f2; }
-    h2 { margin-top: 60px; }
-    .green { color: green; }
-    .red { color: red; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      color: #333;
+    }
+
+    h1 {
+      color: #0d6efd;
+    }
+
+    h2 {
+      color: #0d6efd;
+      border-bottom: 2px solid #0d6efd;
+      padding-bottom: 0.3rem;
+      margin-top: 2rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      text-align: center;
+      padding: 12px;
+      border: 1px solid #dee2e6;
+    }
+
+    th {
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f1f3f5;
+    }
+
+    .cve-0 {
+      color: green;
+      font-weight: bold;
+    }
+
+    .cve-nonzero {
+      color: red;
+      font-weight: bold;
+    }
+
+    .arch {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .badge {
+      background: #0d6efd;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 0.85em;
+    }
   </style>
 </head>
 <body>
-  <h1>Container Image Security Overview</h1>
+  <h1>Container Vulnerability Report</h1>
+  <p>Last updated: <span id="timestamp"></span></p>
+
+  <div id="app-tables"></div>
+
   <script>
-    async function load() {
-      const files = await fetch('data/index.json').then(r => r.json());
-      const container = document.body;
+    function nowISO() {
+      const d = new Date();
+      return d.toISOString().slice(0, 16).replace('T', ' ');
+    }
 
-      for (const file of files) {
-        const data = await fetch(`data/${file}`).then(r => r.json());
-        const appName = file.replace('.json', '');
-        const upstream = data.upstream?.version || 'Unknown';
-        const images = data.images || {};
+    document.getElementById("timestamp").textContent = nowISO();
 
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
-          <tr>
-            <th>Image</th>
-            <th>amd64 Size (MB)</th>
-            <th>arm64 Size (MB)</th>
-            <th>Detected Version</th>
-            <th>Trivy (Crit | High | Med | Low)</th>
-            <th>Grype (Crit | High | Med | Low)</th>
-          </tr>`;
-        table.appendChild(thead);
+    function severityCell(value) {
+      const cls = parseInt(value) === 0 ? 'cve-0' : 'cve-nonzero';
+      return `<span class="${cls}">${value}</span>`;
+    }
 
-        const tbody = document.createElement('tbody');
+    async function render() {
+      const files = ["java", "python", "node", "ruby", "dotnet", "php"];
 
-        for (const [imageName, details] of Object.entries(images)) {
-          const row = document.createElement('tr');
+      const container = document.getElementById("app-tables");
 
-          const get = (obj, key) => obj?.[key] || '';
+      for (const app of files) {
+        const res = await fetch(`data/${app}.json`);
+        const data = await res.json();
 
-          const sizeAmd = get(details, 'amd64')?.size_mb || '';
-          const sizeArm = get(details, 'arm64')?.size_mb || '';
-          const version = get(details, 'detected_version') || '';
+        const section = document.createElement("section");
+        section.innerHTML = `<h2>${app} <span class="badge">Upstream: ${data.upstream.version}</span></h2>`;
 
-          const cves = (tool) => {
-            const vals = ['critical', 'high', 'medium', 'low']
-              .map(k => {
-                const val = parseInt(get(details, tool)?.[k] || '0');
-                const cls = val === 0 ? 'green' : 'red';
-                return `<span class="${cls}">${val}</span>`;
-              });
-            return vals.join(' | ');
-          };
+        const table = document.createElement("table");
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Arch</th>
+              <th>Size (MB)</th>
+              <th>Detected Version</th>
+              <th>Grype (Crit | High | Med | Low)</th>
+              <th>Trivy (Crit | High | Med | Low)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${Object.entries(data.images).map(([img, info]) => {
+              const version = info.detected_version || "-";
+              const grype = info.grype || {critical: "0", high: "0", medium: "0", low: "0"};
+              const trivy = info.trivy || {critical: "0", high: "0", medium: "0", low: "0"};
 
-          row.innerHTML = `
-            <td>${imageName}</td>
-            <td>${sizeAmd}</td>
-            <td>${sizeArm}</td>
-            <td>${version}</td>
-            <td>${cves('trivy')}</td>
-            <td>${cves('grype')}</td>`;
-          tbody.appendChild(row);
-        }
-
-        table.appendChild(tbody);
-
-        const heading = document.createElement('h2');
-        heading.textContent = `${appName.charAt(0).toUpperCase() + appName.slice(1)} (Upstream: ${upstream})`;
-        container.appendChild(heading);
-        container.appendChild(table);
+              return Object.entries(info)
+                .filter(([k]) => !["grype", "trivy", "detected_version"].includes(k))
+                .map(([arch, archInfo]) => `
+                <tr>
+                  <td><strong>${img}</strong></td>
+                  <td class="arch">${arch}</td>
+                  <td>${archInfo.size_mb}</td>
+                  <td>${version}</td>
+                  <td>${severityCell(grype.critical)} | ${severityCell(grype.high)} | ${severityCell(grype.medium)} | ${severityCell(grype.low)}</td>
+                  <td>${severityCell(trivy.critical)} | ${severityCell(trivy.high)} | ${severityCell(trivy.medium)} | ${severityCell(trivy.low)}</td>
+                </tr>
+              `).join('');
+            }).join('')}
+          </tbody>
+        `;
+        section.appendChild(table);
+        container.appendChild(section);
       }
     }
 
-    load();
+    render();
   </script>
 </body>
 </html>
