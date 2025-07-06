@@ -55,8 +55,8 @@ java:
     regex: "openjdk ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/java-min
-    command: "--version"
-    regex: "openjdk ([0-9.]+)"
+    command: ""
+    regex: ""
   cg:
     image:  cgr.dev/chainguard/jdk
     command: "javac --version"

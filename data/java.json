@@ -28,7 +28,6 @@
       "arm64": {
         "size_mb": "84.97"
       },
-      "detected_version": "24",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -40,8 +39,7 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      },
-      "version_delay_days": 108
+      }
     },
     "cg": {
       "amd64": {
