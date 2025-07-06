@@ -14,6 +14,22 @@ dotnet:
     command: "--info"
     regex: "Version: *([0-9.]+)"
 
+go:
+  url: https://github.com/golang/go/tags
+  regex: /tag/go([0-9\.]+[a-zA-Z0-9\-]*)
+  bitnami:
+    image: docker.io/bitnami/golang
+    command: "go version"
+    regex: "go version go([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/golang
+    command: "go version"
+    regex: "go version go([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/go
+    command: "version"
+    regex: "go version go([0-9.]+)"
+
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
