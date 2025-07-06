@@ -90,7 +90,7 @@
     }
 
     async function render() {
-      const files = ["java", "python", "node", "ruby", "dotnet", "php"];
+      const files = ["java", "python", "node", "ruby", "dotnet", "php"]; // hardcoded list of apps
 
       const container = document.getElementById("app-tables");
 
@@ -106,8 +106,8 @@
           <thead>
             <tr>
               <th>Image</th>
-              <th>Arch</th>
-              <th>Size (MB)</th>
+              <th>Size (amd64)</th>
+              <th>Size (arm64)</th>
               <th>Detected Version</th>
               <th>Grype (Crit | High | Med | Low)</th>
               <th>Trivy (Crit | High | Med | Low)</th>
@@ -118,19 +118,19 @@
               const version = info.detected_version || "-";
               const grype = info.grype || {critical: "0", high: "0", medium: "0", low: "0"};
               const trivy = info.trivy || {critical: "0", high: "0", medium: "0", low: "0"};
+              const amd = info.amd64 ? info.amd64.size_mb : "-";
+              const arm = info.arm64 ? info.arm64.size_mb : "-";
 
-              return Object.entries(info)
-                .filter(([k]) => !["grype", "trivy", "detected_version"].includes(k))
-                .map(([arch, archInfo]) => `
+              return `
                 <tr>
                   <td><strong>${img}</strong></td>
-                  <td class="arch">${arch}</td>
-                  <td>${archInfo.size_mb}</td>
+                  <td>${amd}</td>
+                  <td>${arm}</td>
                   <td>${version}</td>
                   <td>${severityCell(grype.critical)} | ${severityCell(grype.high)} | ${severityCell(grype.medium)} | ${severityCell(grype.low)}</td>
                   <td>${severityCell(trivy.critical)} | ${severityCell(trivy.high)} | ${severityCell(trivy.medium)} | ${severityCell(trivy.low)}</td>
                 </tr>
-              `).join('');
+              `;
             }).join('')}
           </tbody>
         `;
