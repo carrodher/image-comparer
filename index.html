@@ -68,6 +68,13 @@
       border-radius: 5px;
       font-size: 0.85em;
     }
+
+    .delay {
+      color: red;
+      font-style: italic;
+      font-size: 0.85em;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -91,7 +98,6 @@
 
     async function render() {
       const files = ["java", "go", "node", "ruby", "python", "dotnet", "php", "rust", "gradle"];
-
       const container = document.getElementById("app-tables");
 
       for (const app of files) {
@@ -116,6 +122,15 @@
           <tbody>
             ${Object.entries(data.images).map(([img, info]) => {
               const version = info.detected_version || "-";
+              const delay = info.version_delay_days;
+              const upstream = data.upstream.version;
+
+              const versionDisplay = version !== "-" ? `
+                ${version}
+                ${version !== upstream && delay > 0
+                  ? `<span class="delay">(${delay} days delayed)</span>` : ""}
+              ` : "-";
+
               const grype = info.grype || {critical: "0", high: "0", medium: "0", low: "0"};
               const trivy = info.trivy || {critical: "0", high: "0", medium: "0", low: "0"};
               const amd = info.amd64 ? info.amd64.size_mb : "-";
@@ -126,7 +141,7 @@
                   <td><strong>${img}</strong></td>
                   <td>${amd}</td>
                   <td>${arm}</td>
-                  <td>${version}</td>
+                  <td>${versionDisplay}</td>
                   <td>${severityCell(grype.critical)} | ${severityCell(grype.high)} | ${severityCell(grype.medium)} | ${severityCell(grype.low)}</td>
                   <td>${severityCell(trivy.critical)} | ${severityCell(trivy.high)} | ${severityCell(trivy.medium)} | ${severityCell(trivy.low)}</td>
                 </tr>

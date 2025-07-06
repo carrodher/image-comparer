@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/google/go-containerregistry/pkg/crane"
@@ -59,7 +60,7 @@ func main() {
 
 	for appName, appConf := range config {
 		log.Printf("Processing app '%s'...", appName)
-		latest := fetchLatestVersion(appConf.URL, appConf.Regex)
+		latest, versionToDate := fetchLatestVersionAndDate(appConf.URL, appConf.Regex)
 		log.Printf("Latest stable version found: %s", latest)
 
 		images := make(map[string]interface{})
@@ -147,6 +148,14 @@ func main() {
 				} else {
 					archInfo["detected_version"] = version
 					log.Printf("Detected version: %s", version)
+
+					// Add delay if not up to date
+					if version != latest {
+						if date, ok := versionToDate[latest]; ok {
+							days := int(time.Since(date).Hours() / 24)
+							archInfo["version_delay_days"] = days
+						}
+					}
 				}
 			}
 
@@ -172,6 +181,61 @@ func main() {
 	}
 }
 
+func fetchLatestVersionAndDate(url, regexStr string) (string, map[string]time.Time) {
+	resp, err := http.Get(url)
+	checkErr(err)
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkErr(err)
+	re, err := regexp.Compile(regexStr)
+	checkErr(err)
+	matches := re.FindAllStringSubmatch(string(body), -1)
+	versionToDate := make(map[string]time.Time)
+	var rawVersions []string
+
+	tagDateRegex := regexp.MustCompile(`<relative-time .*?datetime=\"([0-9T:\-]+)Z\"`) // naive HTML parse
+	tagDateMatches := tagDateRegex.FindAllStringSubmatch(string(body), -1)
+	var dateIdx int
+
+	for _, m := range matches {
+		if len(m) > 1 {
+			rawVer := m[1]
+			lowerVer := strings.ToLower(rawVer)
+			if strings.Contains(lowerVer, "alpha") || strings.Contains(lowerVer, "beta") || strings.Contains(lowerVer, "rc") || strings.Contains(lowerVer, "preview") || strings.Contains(lowerVer, "b") || strings.Contains(lowerVer, "ea") {
+				continue
+			}
+			vClean := strings.TrimPrefix(rawVer, "v")
+			vClean = strings.ReplaceAll(vClean, "_", ".")
+			if strings.Count(vClean, ".") < 2 {
+				continue
+			}
+			if ver, err := semver.NewVersion(vClean); err == nil && ver.Prerelease() == "" {
+				rawVersions = append(rawVersions, vClean)
+				if dateIdx < len(tagDateMatches) && len(tagDateMatches[dateIdx]) > 1 {
+					parsedTime, err := time.Parse("2006-01-02T15:04:05", tagDateMatches[dateIdx][1])
+					if err == nil {
+						versionToDate[vClean] = parsedTime
+					}
+					dateIdx++
+				}
+			}
+		}
+	}
+
+	var semVersions []*semver.Version
+	for _, v := range rawVersions {
+		ver, err := semver.NewVersion(v)
+		if err == nil {
+			semVersions = append(semVersions, ver)
+		}
+	}
+	if len(semVersions) == 0 {
+		log.Fatal("No valid stable versions found")
+	}
+	sort.Sort(sort.Reverse(semver.Collection(semVersions)))
+	return semVersions[0].String(), versionToDate
+}
+
 func extractVersionFromImage(image, cmdStr, regexStr string) (string, error) {
 	parts := strings.Split(cmdStr, " ")
 	args := append([]string{"run", "--rm", image}, parts...)
@@ -189,57 +253,6 @@ func extractVersionFromImage(image, cmdStr, regexStr string) (string, error) {
 		return matches[1], nil
 	}
 	return "", fmt.Errorf("version not found in output")
-}
-
-func fetchLatestVersion(url, regexStr string) string {
-	resp, err := http.Get(url)
-	checkErr(err)
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	checkErr(err)
-	re, err := regexp.Compile(regexStr)
-	checkErr(err)
-	matches := re.FindAllStringSubmatch(string(body), -1)
-	var rawVersions []string
-	for _, m := range matches {
-		if len(m) > 1 {
-			rawVer := m[1]
-
-			// Exclude pre-release versions (alpha, beta, rc, ea, etc)
-			lowerVer := strings.ToLower(rawVer)
-			if strings.Contains(lowerVer, "alpha") ||
-				strings.Contains(lowerVer, "beta") ||
-				strings.Contains(lowerVer, "rc") ||
-				strings.Contains(lowerVer, "preview") ||
-				strings.Contains(lowerVer, "b") ||
-				strings.Contains(lowerVer, "ea") {
-				continue
-			}
-
-			rawVersions = append(rawVersions, rawVer)
-		}
-	}
-	var semVersions []*semver.Version
-	for _, v := range rawVersions {
-	    v = strings.TrimPrefix(v, "v")
-
-	    // Convert underscores to dots for ruby-like versions
-	    v = strings.ReplaceAll(v, "_", ".")
-
-	    if strings.Count(v, ".") < 2 {
-	        continue
-	    }
-	    ver, err := semver.NewVersion(v)
-	    if err != nil || ver.Prerelease() != "" {
-	        continue
-	    }
-	    semVersions = append(semVersions, ver)
-	}
-	if len(semVersions) == 0 {
-		log.Fatal("No valid stable versions found")
-	}
-	sort.Sort(sort.Reverse(semver.Collection(semVersions)))
-	return semVersions[0].String()
 }
 
 func scanTrivy(image string) (map[string]string, error) {
