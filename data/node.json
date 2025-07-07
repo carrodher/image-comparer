@@ -23,11 +23,12 @@
     },
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "49.03"
+        "size_mb": "49.04"
       },
       "arm64": {
         "size_mb": "48.17"
       },
+      "detected_version": "24.3.0",
       "grype": {
         "critical": "0",
         "high": "0",
