@@ -141,3 +141,19 @@ rust:
     image: cgr.dev/chainguard/rust
     command: "--version"
     regex: "rustc ([0-9.]+)"
+
+tomcat:
+  url: https://github.com/apache/tomcat/tags
+  regex: /tag/(10\.[0-9\.]+[a-zA-Z0-9\-]*)
+  bitnami:
+    image: docker.io/bitnami/tomcat
+    command: "catalina.sh version"
+    regex: "Server version: Apache Tomcat/([0-9.]+)"
+  bitnamisecure:
+    image: docker.io/bitnamisecure/tomcat
+    command: "catalina.sh version"
+    regex: "Server version: Apache Tomcat/([0-9.]+)"
+  cg:
+    image: cgr.dev/chainguard/tomcat
+    command: "version"
+    regex: "Server version: Apache Tomcat/([0-9.]+)"
