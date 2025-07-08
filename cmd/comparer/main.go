@@ -29,7 +29,6 @@ type ImageConfig struct {
 type AppConfig struct {
 	URL           string      `yaml:"url"`
 	Regex         string      `yaml:"regex"`
-	Bitnami       ImageConfig `yaml:"bitnami"`
 	BitnamiSecure ImageConfig `yaml:"bitnamisecure"`
 	CG            ImageConfig `yaml:"cg"`
 }
@@ -65,7 +64,6 @@ func main() {
 
 		images := make(map[string]interface{})
 		imageMap := map[string]ImageConfig{
-			"bitnami":       appConf.Bitnami,
 			"bitnamisecure": appConf.BitnamiSecure,
 			"cg":            appConf.CG,
 		}

@@ -1,6 +1,6 @@
 # Upstream Version & Image Scanner
 
-This Go tool automates tracking of upstream software versions and evaluates corresponding container images (e.g. from Bitnami, Bitnami Secure, and Chainguard). It collects:
+This Go tool automates tracking of upstream software versions and evaluates corresponding container images (e.g. from Bitnami Secure and Chainguard). It collects:
 - **Latest upstream version and release date**
 - **Container size per architecture**
 - **Security scan results (Grype & Trivy)**
@@ -14,27 +14,6 @@ Each application is defined in `config.yaml` and results are stored in per-app `
 ```json
 {
   "images": {
-    "bitnami": {
-      "amd64": {
-        "size_mb": "302.44"
-      },
-      "arm64": {
-        "size_mb": "281.24"
-      },
-      "detected_version": "24.0.1",
-      "grype": {
-        "critical": "0",
-        "high": "17",
-        "low": "9",
-        "medium": "20"
-      },
-      "trivy": {
-        "critical": "1",
-        "high": "16",
-        "low": "106",
-        "medium": "20"
-      }
-    },
     "bitnamisecure": {
       "amd64": {
         "size_mb": "101.57"
@@ -106,10 +85,6 @@ cd image-comparer
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
-  bitnami:
-    image: docker.io/bitnami/java
-    command: "java --version"
-    regex: "openjdk ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/java-min
     command: "--version"
@@ -126,15 +101,6 @@ $ go run cmd/comparer/main.go
 2025/07/05 20:12:02 Reading config.yaml...
 2025/07/05 20:12:02 Processing app 'java'...
 2025/07/05 20:12:03 Latest stable version found: 24.0.1
-2025/07/05 20:12:03 Fetching manifest list for image 'bitnami' (docker.io/bitnami/java:latest)...
-2025/07/05 20:12:05 Pulling image for arch 'amd64' with digest sha256:6e659dbbdb7aba26a9cb4e911c5cb9b40596fc74d5d61a1ccf2d6e065fcbeaa9...
-2025/07/05 20:12:06 Image size for arch 'amd64': 302.44 MB
-2025/07/05 20:12:06 Pulling image for arch 'arm64' with digest sha256:f395ca905ab2ae84e10be5069248a52bed476465b3e2b4d8322ed066148588e0...
-2025/07/05 20:12:07 Image size for arch 'arm64': 281.24 MB
-2025/07/05 20:12:07 Running Grype scan for image 'docker.io/bitnami/java:latest'...
-2025/07/05 20:12:23 Running Trivy scan for image 'docker.io/bitnami/java:latest'...
-2025/07/05 20:12:23 Extracting version from container 'docker.io/bitnami/java:latest'...
-2025/07/05 20:12:24 Detected version: 24.0.1
 2025/07/05 20:12:24 Fetching manifest list for image 'bitnamisecure' (docker.io/bitnamisecure/java-min:latest)...
 2025/07/05 20:12:26 Pulling image for arch 'amd64' with digest sha256:20585180c180c5f81d90a0e60a870a9b57e4acecdd834f9cfa27dd5ca1c769b3...
 2025/07/05 20:12:27 Image size for arch 'amd64': 101.57 MB

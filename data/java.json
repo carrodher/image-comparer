@@ -1,26 +1,5 @@
 {
   "images": {
-    "bitnami": {
-      "amd64": {
-        "size_mb": "302.44"
-      },
-      "arm64": {
-        "size_mb": "281.24"
-      },
-      "detected_version": "24.0.1",
-      "grype": {
-        "critical": "0",
-        "high": "17",
-        "low": "9",
-        "medium": "20"
-      },
-      "trivy": {
-        "critical": "1",
-        "high": "16",
-        "low": "106",
-        "medium": "20"
-      }
-    },
     "bitnamisecure": {
       "amd64": {
         "size_mb": "101.57"

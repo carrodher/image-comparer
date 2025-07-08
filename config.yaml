@@ -1,10 +1,6 @@
 dotnet:
   url: https://github.com/dotnet/aspnetcore/tags
   regex: /tag/v([0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/aspnet-core
-    command: "dotnet --info"
-    regex: "Version: *([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/aspnet-min
     command: "--info"
@@ -17,10 +13,6 @@ dotnet:
 go:
   url: https://github.com/golang/go/tags
   regex: /tag/go([0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/golang
-    command: "go version"
-    regex: "go version go([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/golang
     command: "go version"
@@ -33,10 +25,6 @@ go:
 gradle:
   url: https://github.com/gradle/gradle/tags
   regex: /tag/v([0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/gradle
-    command: "gradle --version"
-    regex: "Gradle ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/gradle
     command: "gradle --version"
@@ -49,10 +37,6 @@ gradle:
 java:
   url: https://github.com/bell-sw/Liberica/tags
   regex: /tag/([0-9A-Za-z.\-_]+)
-  bitnami:
-    image: docker.io/bitnami/java
-    command: "java --version"
-    regex: "openjdk ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/java-min
     command: ""
@@ -65,10 +49,6 @@ java:
 node:
   url: https://github.com/nodejs/node/tags
   regex: /tag/v([0-9][02468].[0-9\\.]+)
-  bitnami:
-    image: docker.io/bitnami/node
-    command: "node --version"
-    regex: "v([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/node-min
     command: "--version"
@@ -81,10 +61,6 @@ node:
 php:
   url: https://github.com/php/php-src/tags
   regex: /tag/php-([0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/php-fpm
-    command: "php --version"
-    regex: "PHP ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/php-fpm-min
     command: ""
@@ -97,10 +73,6 @@ php:
 python:
   url: https://github.com/python/cpython/tags
   regex: /tag/v([0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/python
-    command: "python --version"
-    regex: "Python ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/python-min
     command: "--version"
@@ -113,10 +85,6 @@ python:
 ruby:
   url: https://github.com/ruby/ruby/tags
   regex: /tag/v([0-9_]+)
-  bitnami:
-    image: docker.io/bitnami/ruby
-    command: "ruby --version"
-    regex: "ruby ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/ruby-min
     command: "--version"
@@ -129,10 +97,6 @@ ruby:
 rust:
   url: https://github.com/rust-lang/rust/tags
   regex: /tag/([0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/rust
-    command: "rustc --version"
-    regex: "rustc ([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/rust
     command: "rustc --version"
@@ -145,10 +109,6 @@ rust:
 tomcat:
   url: https://github.com/apache/tomcat/tags
   regex: /tag/(10\.[0-9\.]+[a-zA-Z0-9\-]*)
-  bitnami:
-    image: docker.io/bitnami/tomcat
-    command: "catalina.sh version"
-    regex: "Server version: Apache Tomcat/([0-9.]+)"
   bitnamisecure:
     image: docker.io/bitnamisecure/tomcat
     command: "catalina.sh version"
