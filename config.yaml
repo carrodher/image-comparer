@@ -39,8 +39,8 @@ java:
   regex: /tag/([0-9A-Za-z.\-_]+)
   bitnamisecure:
     image: docker.io/bitnamisecure/java-min
-    command: ""
-    regex: ""
+    command: "--version"
+    regex: "openjdk ([0-9.]+)"
   cg:
     image:  cgr.dev/chainguard/jdk
     command: "javac --version"

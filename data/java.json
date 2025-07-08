@@ -7,6 +7,7 @@
       "arm64": {
         "size_mb": "84.97"
       },
+      "detected_version": "24.0.1",
       "grype": {
         "critical": "0",
         "high": "0",
