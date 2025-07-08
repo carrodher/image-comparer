@@ -16,9 +16,9 @@
       },
       "trivy": {
         "critical": "1",
-        "high": "176",
+        "high": "187",
         "low": "382",
-        "medium": "455"
+        "medium": "458"
       }
     },
     "bitnamisecure": {
@@ -44,10 +44,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "282.86"
+        "size_mb": "280.60"
       },
       "arm64": {
-        "size_mb": "269.22"
+        "size_mb": "266.98"
       },
       "detected_version": "1.24.4",
       "grype": {

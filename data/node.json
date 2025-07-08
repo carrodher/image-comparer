@@ -16,9 +16,9 @@
       },
       "trivy": {
         "critical": "1",
-        "high": "176",
+        "high": "187",
         "low": "385",
-        "medium": "459"
+        "medium": "462"
       }
     },
     "bitnamisecure": {
