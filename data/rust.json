@@ -5,7 +5,7 @@
         "size_mb": "458.44"
       },
       "arm64": {
-        "size_mb": "436.15"
+        "size_mb": "436.14"
       },
       "detected_version": "1.88.0",
       "grype": {
@@ -23,10 +23,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "359.97"
+        "size_mb": "359.99"
       },
       "arm64": {
-        "size_mb": "345.39"
+        "size_mb": "345.38"
       },
       "detected_version": "1.88.0",
       "grype": {
