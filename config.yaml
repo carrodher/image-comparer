@@ -108,7 +108,7 @@ rust:
 
 tomcat:
   url: https://github.com/apache/tomcat/tags
-  regex: /tag/(10\.[0-9\.]+[a-zA-Z0-9\-]*)
+  regex: /tag/([0-9\.]+[a-zA-Z0-9\-]*)
   bitnamisecure:
     image: docker.io/bitnamisecure/tomcat
     command: "catalina.sh version"
