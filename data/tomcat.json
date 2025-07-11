@@ -19,8 +19,7 @@
         "high": "1",
         "low": "0",
         "medium": "0"
-      },
-      "version_delay_days": 8
+      }
     },
     "cg": {
       "amd64": {
@@ -41,8 +40,7 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      },
-      "version_delay_days": 8
+      }
     }
   },
   "upstream": {
