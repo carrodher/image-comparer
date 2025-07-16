@@ -19,14 +19,15 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 46
     },
     "cg": {
       "amd64": {
-        "size_mb": "133.93"
+        "size_mb": "133.92"
       },
       "arm64": {
-        "size_mb": "131.66"
+        "size_mb": "131.64"
       },
       "detected_version": "24.0.2",
       "grype": {
@@ -40,11 +41,10 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      },
-      "version_delay_days": 118
+      }
     }
   },
   "upstream": {
-    "version": "24.0.1"
+    "version": "24.0.2"
   }
 }

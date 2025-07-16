@@ -25,7 +25,7 @@
         "size_mb": "21.65"
       },
       "arm64": {
-        "size_mb": "20.62"
+        "size_mb": "20.61"
       },
       "grype": {
         "critical": "0",
