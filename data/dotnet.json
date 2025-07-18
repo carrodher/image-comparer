@@ -23,10 +23,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "69.25"
+        "size_mb": "69.27"
       },
       "arm64": {
-        "size_mb": "66.50"
+        "size_mb": "66.52"
       },
       "detected_version": "9.0.7",
       "grype": {
