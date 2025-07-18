@@ -16,32 +16,31 @@
       },
       "trivy": {
         "critical": "0",
-        "high": "1",
+        "high": "0",
         "low": "0",
         "medium": "0"
       }
     },
     "cg": {
       "amd64": {
-        "size_mb": "86.99"
+        "size_mb": "87.03"
       },
       "arm64": {
-        "size_mb": "85.32"
+        "size_mb": "85.36"
       },
-      "detected_version": "11.0.8",
+      "detected_version": "11.0.9",
       "grype": {
         "critical": "0",
         "high": "0",
         "low": "2",
-        "medium": "1"
+        "medium": "0"
       },
       "trivy": {
         "critical": "0",
         "high": "0",
         "low": "0",
         "medium": "0"
-      },
-      "version_delay_days": 15
+      }
     }
   },
   "upstream": {
