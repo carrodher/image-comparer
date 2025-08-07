@@ -19,14 +19,15 @@
         "high": "1",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 0
     },
     "cg": {
       "amd64": {
         "size_mb": "22.31"
       },
       "arm64": {
-        "size_mb": "21.17"
+        "size_mb": "21.18"
       },
       "detected_version": "3.13.5",
       "grype": {
@@ -40,10 +41,11 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 0
     }
   },
   "upstream": {
-    "version": "3.13.5"
+    "version": "3.13.6"
   }
 }

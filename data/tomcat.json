@@ -2,7 +2,7 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "121.01"
+        "size_mb": "120.99"
       },
       "arm64": {
         "size_mb": "115.86"
@@ -20,7 +20,7 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 4
+      "version_delay_days": 6
     },
     "cg": {
       "amd64": {
