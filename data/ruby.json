@@ -20,27 +20,6 @@
         "low": "0",
         "medium": "0"
       }
-    },
-    "cg": {
-      "amd64": {
-        "size_mb": "55.46"
-      },
-      "arm64": {
-        "size_mb": "54.15"
-      },
-      "detected_version": "3.4.5",
-      "grype": {
-        "critical": "0",
-        "high": "0",
-        "low": "0",
-        "medium": "0"
-      },
-      "trivy": {
-        "critical": "0",
-        "high": "0",
-        "low": "0",
-        "medium": "0"
-      }
     }
   },
   "upstream": {
