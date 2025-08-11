@@ -2,38 +2,16 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "120.99"
+        "size_mb": "121.02"
       },
       "arm64": {
-        "size_mb": "115.86"
-      },
-      "detected_version": "11.0.9",
-      "grype": {
-        "critical": "0",
-        "high": "0",
-        "low": "0",
-        "medium": "0"
-      },
-      "trivy": {
-        "critical": "0",
-        "high": "0",
-        "low": "0",
-        "medium": "0"
-      },
-      "version_delay_days": 6
-    },
-    "cg": {
-      "amd64": {
-        "size_mb": "87.04"
-      },
-      "arm64": {
-        "size_mb": "85.36"
+        "size_mb": "115.88"
       },
       "detected_version": "11.0.10",
       "grype": {
         "critical": "0",
         "high": "0",
-        "low": "2",
+        "low": "0",
         "medium": "0"
       },
       "trivy": {
