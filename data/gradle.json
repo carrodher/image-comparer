@@ -32,7 +32,7 @@
       "grype": {
         "critical": "0",
         "high": "0",
-        "low": "2",
+        "low": "1",
         "medium": "0"
       },
       "trivy": {
