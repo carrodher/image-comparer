@@ -5,7 +5,7 @@
         "size_mb": "19.96"
       },
       "arm64": {
-        "size_mb": "19.72"
+        "size_mb": "19.74"
       },
       "detected_version": "3.13.7",
       "grype": {
@@ -16,7 +16,7 @@
       },
       "trivy": {
         "critical": "0",
-        "high": "4",
+        "high": "0",
         "low": "0",
         "medium": "0"
       }
@@ -26,7 +26,7 @@
         "size_mb": "22.38"
       },
       "arm64": {
-        "size_mb": "21.20"
+        "size_mb": "21.19"
       },
       "detected_version": "3.13.7",
       "grype": {
