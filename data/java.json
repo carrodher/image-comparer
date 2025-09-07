@@ -16,23 +16,23 @@
       },
       "trivy": {
         "critical": "0",
-        "high": "4",
+        "high": "0",
         "low": "0",
         "medium": "0"
       }
     },
     "cg": {
       "amd64": {
-        "size_mb": "133.95"
+        "size_mb": "133.91"
       },
       "arm64": {
-        "size_mb": "131.83"
+        "size_mb": "131.77"
       },
       "detected_version": "24.0.2",
       "grype": {
         "critical": "0",
         "high": "0",
-        "low": "1",
+        "low": "0",
         "medium": "0"
       },
       "trivy": {
