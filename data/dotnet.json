@@ -7,7 +7,7 @@
       "arm64": {
         "size_mb": "65.91"
       },
-      "detected_version": "9.0.8",
+      "detected_version": "9.0.9",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -23,12 +23,12 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "70.50"
+        "size_mb": "70.47"
       },
       "arm64": {
-        "size_mb": "67.65"
+        "size_mb": "67.64"
       },
-      "detected_version": "9.0.8",
+      "detected_version": "9.0.9",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -44,6 +44,6 @@
     }
   },
   "upstream": {
-    "version": "9.0.8"
+    "version": "9.0.9"
   }
 }
