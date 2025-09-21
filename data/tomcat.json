@@ -5,7 +5,7 @@
         "size_mb": "120.87"
       },
       "arm64": {
-        "size_mb": "115.77"
+        "size_mb": "115.66"
       },
       "detected_version": "11.0.11",
       "grype": {
