@@ -20,7 +20,7 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 115
+      "version_delay_days": 117
     },
     "cg": {
       "amd64": {
@@ -42,7 +42,7 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 115
+      "version_delay_days": 117
     }
   },
   "upstream": {
