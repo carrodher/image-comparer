@@ -19,16 +19,17 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 0
     },
     "cg": {
       "amd64": {
-        "size_mb": "87.34"
+        "size_mb": "87.32"
       },
       "arm64": {
-        "size_mb": "85.61"
+        "size_mb": "85.59"
       },
-      "detected_version": "11.0.11",
+      "detected_version": "11.0.12",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -44,6 +45,6 @@
     }
   },
   "upstream": {
-    "version": "11.0.11"
+    "version": "11.0.12"
   }
 }
