@@ -20,11 +20,11 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 124
+      "version_delay_days": 126
     },
     "cg": {
       "amd64": {
-        "size_mb": "130.74"
+        "size_mb": "130.75"
       },
       "arm64": {
         "size_mb": "128.73"
@@ -42,7 +42,7 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 124
+      "version_delay_days": 126
     }
   },
   "upstream": {
