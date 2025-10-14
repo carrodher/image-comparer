@@ -2,10 +2,10 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "461.14"
+        "size_mb": "461.10"
       },
       "arm64": {
-        "size_mb": "394.30"
+        "size_mb": "394.29"
       },
       "detected_version": "1.90.0",
       "grype": {
@@ -23,10 +23,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "363.78"
+        "size_mb": "363.77"
       },
       "arm64": {
-        "size_mb": "348.34"
+        "size_mb": "348.35"
       },
       "detected_version": "1.90.0",
       "grype": {
