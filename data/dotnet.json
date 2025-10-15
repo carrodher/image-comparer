@@ -7,7 +7,7 @@
       "arm64": {
         "size_mb": "65.91"
       },
-      "detected_version": "9.0.9",
+      "detected_version": "9.0.10",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -40,10 +40,11 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 19
     }
   },
   "upstream": {
-    "version": "9.0.9"
+    "version": "9.0.10"
   }
 }
