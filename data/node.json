@@ -23,12 +23,12 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "56.35"
+        "size_mb": "57.36"
       },
       "arm64": {
-        "size_mb": "54.62"
+        "size_mb": "55.53"
       },
-      "detected_version": "24.10.0",
+      "detected_version": "25.0.0",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -40,7 +40,8 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 10
     }
   },
   "upstream": {
