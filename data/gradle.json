@@ -2,12 +2,12 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "216.25"
+        "size_mb": "217.48"
       },
       "arm64": {
-        "size_mb": "206.35"
+        "size_mb": "207.31"
       },
-      "detected_version": "9.1.0",
+      "detected_version": "9.2.0",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -40,10 +40,11 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 5
     }
   },
   "upstream": {
-    "version": "9.1.0"
+    "version": "9.2.0"
   }
 }
