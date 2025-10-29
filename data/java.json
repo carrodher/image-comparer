@@ -20,11 +20,11 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 39
+      "version_delay_days": 41
     },
     "cg": {
       "amd64": {
-        "size_mb": "130.81"
+        "size_mb": "130.82"
       },
       "arm64": {
         "size_mb": "128.81"
