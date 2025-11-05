@@ -2,7 +2,7 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "39.38"
+        "size_mb": "39.40"
       },
       "arm64": {
         "size_mb": "38.44"
@@ -22,10 +22,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "21.35"
+        "size_mb": "21.36"
       },
       "arm64": {
-        "size_mb": "20.31"
+        "size_mb": "20.32"
       },
       "grype": {
         "critical": "0",
