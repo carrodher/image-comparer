@@ -11,7 +11,7 @@
       "grype": {
         "critical": "0",
         "high": "0",
-        "low": "0",
+        "low": "1",
         "medium": "1"
       },
       "trivy": {
@@ -41,7 +41,7 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 29
+      "version_delay_days": 30
     }
   },
   "upstream": {
