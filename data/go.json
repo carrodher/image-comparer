@@ -31,9 +31,9 @@
       "detected_version": "1.25.4",
       "grype": {
         "critical": "0",
-        "high": "0",
+        "high": "4",
         "low": "0",
-        "medium": "0"
+        "medium": "8"
       },
       "trivy": {
         "critical": "0",
