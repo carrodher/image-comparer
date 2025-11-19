@@ -16,8 +16,8 @@
       },
       "trivy": {
         "critical": "0",
-        "high": "0",
-        "low": "0",
+        "high": "1",
+        "low": "1",
         "medium": "0"
       }
     },
