@@ -7,7 +7,7 @@
       "arm64": {
         "size_mb": "20.11"
       },
-      "detected_version": "3.14.1",
+      "detected_version": "3.14.2",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -19,8 +19,7 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      },
-      "version_delay_days": 3
+      }
     },
     "cg": {
       "amd64": {
@@ -34,7 +33,7 @@
         "critical": "0",
         "high": "0",
         "low": "0",
-        "medium": "1"
+        "medium": "0"
       },
       "trivy": {
         "critical": "0",
