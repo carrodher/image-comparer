@@ -22,10 +22,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "24.21"
+        "size_mb": "24.23"
       },
       "arm64": {
-        "size_mb": "22.99"
+        "size_mb": "23.00"
       },
       "grype": {
         "critical": "0",
