@@ -5,9 +5,9 @@
         "size_mb": "46.53"
       },
       "arm64": {
-        "size_mb": "45.67"
+        "size_mb": "45.66"
       },
-      "detected_version": "24.12.0",
+      "detected_version": "24.13.0",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -23,16 +23,16 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "55.23"
+        "size_mb": "55.24"
       },
       "arm64": {
-        "size_mb": "53.51"
+        "size_mb": "53.49"
       },
-      "detected_version": "25.2.1",
+      "detected_version": "25.3.0",
       "grype": {
         "critical": "0",
-        "high": "0",
-        "low": "0",
+        "high": "2",
+        "low": "1",
         "medium": "1"
       },
       "trivy": {
@@ -41,10 +41,10 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 47
+      "version_delay_days": 5
     }
   },
   "upstream": {
-    "version": "24.12.0"
+    "version": "24.13.0"
   }
 }
