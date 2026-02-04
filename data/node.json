@@ -30,8 +30,8 @@
       },
       "detected_version": "25.5.0",
       "grype": {
-        "critical": "0",
-        "high": "1",
+        "critical": "1",
+        "high": "2",
         "low": "0",
         "medium": "0"
       },
@@ -41,7 +41,7 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 10
+      "version_delay_days": 8
     }
   },
   "upstream": {
