@@ -2,7 +2,7 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "111.37"
+        "size_mb": "111.38"
       },
       "arm64": {
         "size_mb": "106.97"
@@ -23,7 +23,7 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "96.57"
+        "size_mb": "96.65"
       },
       "arm64": {
         "size_mb": "94.51"
