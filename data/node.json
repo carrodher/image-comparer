@@ -2,12 +2,12 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "46.53"
+        "size_mb": "47.01"
       },
       "arm64": {
-        "size_mb": "45.66"
+        "size_mb": "46.16"
       },
-      "detected_version": "24.13.0",
+      "detected_version": "24.13.1",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -23,15 +23,15 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "58.22"
+        "size_mb": "58.50"
       },
       "arm64": {
-        "size_mb": "56.36"
+        "size_mb": "56.61"
       },
-      "detected_version": "25.5.0",
+      "detected_version": "25.6.1",
       "grype": {
-        "critical": "1",
-        "high": "2",
+        "critical": "0",
+        "high": "0",
         "low": "0",
         "medium": "0"
       },
@@ -41,10 +41,10 @@
         "low": "0",
         "medium": "0"
       },
-      "version_delay_days": 8
+      "version_delay_days": 11
     }
   },
   "upstream": {
-    "version": "24.13.0"
+    "version": "24.13.1"
   }
 }
