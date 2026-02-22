@@ -5,9 +5,9 @@
         "size_mb": "470.53"
       },
       "arm64": {
-        "size_mb": "402.02"
+        "size_mb": "402.05"
       },
-      "detected_version": "1.93.0",
+      "detected_version": "1.93.1",
       "grype": {
         "critical": "0",
         "high": "0",
@@ -23,10 +23,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "354.16"
+        "size_mb": "354.92"
       },
       "arm64": {
-        "size_mb": "338.53"
+        "size_mb": "339.32"
       },
       "detected_version": "1.93.0",
       "grype": {
@@ -40,10 +40,11 @@
         "high": "0",
         "low": "0",
         "medium": "0"
-      }
+      },
+      "version_delay_days": 30
     }
   },
   "upstream": {
-    "version": "1.93.0"
+    "version": "1.93.1"
   }
 }
