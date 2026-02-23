@@ -22,10 +22,10 @@
     },
     "cg": {
       "amd64": {
-        "size_mb": "24.27"
+        "size_mb": "24.37"
       },
       "arm64": {
-        "size_mb": "23.08"
+        "size_mb": "23.16"
       },
       "grype": {
         "critical": "0",
@@ -42,6 +42,6 @@
     }
   },
   "upstream": {
-    "version": "8.5.2"
+    "version": "8.5.3"
   }
 }
