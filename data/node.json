@@ -2,49 +2,39 @@
   "images": {
     "bitnamisecure": {
       "amd64": {
-        "size_mb": "47.01"
+        "size_mb": "47.07"
       },
       "arm64": {
-        "size_mb": "46.16"
+        "size_mb": "46.21"
       },
-      "detected_version": "24.13.1",
+      "detected_version": "24.14.0",
       "grype": {
         "critical": "0",
         "high": "0",
         "low": "0",
         "medium": "0"
       },
-      "trivy": {
-        "critical": "0",
-        "high": "0",
-        "low": "0",
-        "medium": "0"
-      }
+      "trivy": null
     },
     "cg": {
       "amd64": {
-        "size_mb": "58.50"
+        "size_mb": "58.60"
       },
       "arm64": {
-        "size_mb": "56.61"
+        "size_mb": "56.71"
       },
-      "detected_version": "25.6.1",
+      "detected_version": "25.7.0",
       "grype": {
         "critical": "0",
-        "high": "0",
+        "high": "2",
         "low": "0",
         "medium": "0"
       },
-      "trivy": {
-        "critical": "0",
-        "high": "0",
-        "low": "0",
-        "medium": "0"
-      },
-      "version_delay_days": 12
+      "trivy": null,
+      "version_delay_days": 4
     }
   },
   "upstream": {
-    "version": "24.13.1"
+    "version": "24.14.0"
   }
 }
